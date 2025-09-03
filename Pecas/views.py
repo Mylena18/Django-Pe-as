@@ -1,67 +1,48 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Fornecedor, Peca
-from .forms import FornecedorForm, PecaForm
+from django.contrib import messages
+from .models import Peca
+from .forms import PecaForm
 
-#FORNEC
-def fornecedor_list(request):
-    fornecedores = Fornecedor.objects.all()
-    return render(request, 'fornecedor_list.html', {'fornecedores': fornecedores})
-
-def fornecedor_create(request):
-    if request.method == "POST":
-        form = FornecedorForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('fornecedor_list')
-    else:
-        form = FornecedorForm()
-    return render(request, 'fornecedor_form.html', {'form': form})
-
-def fornecedor_update(request, pk):
-    fornecedor = get_object_or_404(Fornecedor, pk=pk)
-    if request.method == "POST":
-        form = FornecedorForm(request.POST, instance=fornecedor)
-        if form.is_valid():
-            form.save()
-            return redirect('fornecedor_list')
-    else:
-        form = FornecedorForm(instance=fornecedor)
-    return render(request, 'fornecedor_form.html', {'form': form})
-
-def fornecedor_delete(request, pk):
-    fornecedor = get_object_or_404(Fornecedor, pk=pk)
-    fornecedor.delete()
-    return redirect('fornecedor_list')
-
-
-#PECA
-def peca_list(request):
+def lista_pecas(request):
     pecas = Peca.objects.all()
-    return render(request, 'peca_list.html', {'pecas': pecas})
+    return render(request, 'pecas/lista_pecas.html', {'pecas': pecas})
 
-def peca_create(request):
-    if request.method == "POST":
+def criar_peca(request):
+    if request.method == 'POST':
         form = PecaForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('peca_list')
+            messages.success(request, 'Peça cadastrada com sucesso!')
+            return redirect('lista_pecas')
     else:
         form = PecaForm()
-    return render(request, 'peca_form.html', {'form': form})
+    
+    return render(request, 'pecas/form_peca.html', {'form': form, 'titulo': 'Nova Peça'})
 
-def peca_update(request, pk):
-    peca = get_object_or_404(Peca, pk=pk)
-    if request.method == "POST":
+def editar_peca(request, id):
+    peca = get_object_or_404(Peca, id=id)
+    
+    if request.method == 'POST':
         form = PecaForm(request.POST, instance=peca)
         if form.is_valid():
             form.save()
-            return redirect('peca_list')
+            messages.success(request, 'Peça atualizada com sucesso!')
+            return redirect('lista_pecas')
     else:
         form = PecaForm(instance=peca)
-    return render(request, 'peca_form.html', {'form': form})
+    
+    return render(request, 'pecas/form_peca.html', {'form': form, 'titulo': 'Editar Peça'})
 
-def peca_delete(request, pk):
-    peca = get_object_or_404(Peca, pk=pk)
-    peca.delete()
-    return redirect('peca_list')
+def visualizar_peca(request, id):
+    peca = get_object_or_404(Peca, id=id)
+    return render(request, 'pecas/visualizar_peca.html', {'peca': peca})
 
+def deletar_peca(request, id):
+    peca = get_object_or_404(Peca, id=id)
+    
+    if request.method == 'POST':
+        peca.delete()
+        messages.success(request, 'Peça excluída com sucesso!')
+        return redirect('lista_pecas')
+    
+    return render(request, 'pecas/confirmar_exclusao.html', {'peca': peca})

@@ -1,0 +1,48 @@
+{% extends 'pecas/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h2>Detalhes da Peça</h2>
+            </div>
+            <div class="card-body">
+                <h4 class="mb-3">Informações da Peça</h4>
+                <dl class="row">
+                    <dt class="col-sm-3">Descrição:</dt>
+                    <dd class="col-sm-9">{{ peca.descricao }}</dd>
+
+                    <dt class="col-sm-3">Marca:</dt>
+                    <dd class="col-sm-9">{{ peca.marca }}</dd>
+                </dl>
+
+                <h4 class="mb-3 mt-4">Informações do Fornecedor</h4>
+                <dl class="row">
+                    <dt class="col-sm-3">Fornecedor:</dt>
+                    <dd class="col-sm-9">{{ peca.fornecedor }}</dd>
+
+                    <dt class="col-sm-3">Telefone:</dt>
+                    <dd class="col-sm-9">{{ peca.telefone_fornecedor }}</dd>
+                </dl>
+
+                <h4 class="mb-3 mt-4">Endereço do Fornecedor</h4>
+                <dl class="row">
+                    <dt class="col-sm-3">Endereço:</dt>
+                    <dd class="col-sm-9">{{ peca.endereco_completo }}</dd>
+                </dl>
+
+                <dl class="row">
+                    <dt class="col-sm-3">Data Cadastro:</dt>
+                    <dd class="col-sm-9">{{ peca.data_cadastro }}</dd>
+                </dl>
+                
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <a href="{% url 'lista_pecas' %}" class="btn btn-secondary me-md-2">Voltar</a>
+                    <a href="{% url 'editar_peca' peca.id %}" class="btn btn-warning me-md-2">Editar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

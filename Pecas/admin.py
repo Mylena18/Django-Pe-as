@@ -1,16 +1,33 @@
 from django.contrib import admin
-from .models import Fornecedor, Peca
-
-@admin.register(Fornecedor)
-class FornecedorAdmin(admin.ModelAdmin):
-    list_display= ('nome','endereco','telefone')
-    search_fields= ('nome','telefone')
-    list_per_page= 10
+from .models import Peca
 
 @admin.register(Peca)
 class PecaAdmin(admin.ModelAdmin):
-    list_display =('descricao','marca','fornecedor')
-    search_fields =('descricao','marca')
-    list_filter =('marca','fornecedor')
-    list_per_page= 10
-
+    list_display = ('descricao', 'fornecedor', 'endereco_cidade', 'endereco_estado', 'marca', 'data_cadastro')
+    list_filter = ('endereco_estado', 'marca', 'data_cadastro')
+    search_fields = ('descricao', 'fornecedor', 'marca')
+    readonly_fields = ('data_cadastro', 'data_atualizacao')
+    
+    fieldsets = (
+        ('Informações da Peça', {
+            'fields': ('descricao', 'marca')
+        }),
+        ('Informações do Fornecedor', {
+            'fields': ('fornecedor', 'telefone_fornecedor')
+        }),
+        ('Endereço do Fornecedor', {
+            'fields': (
+                'endereco_rua', 
+                'endereco_numero', 
+                'endereco_complemento',
+                'endereco_bairro',
+                'endereco_cidade',
+                'endereco_estado',
+                'endereco_cep'
+            )
+        }),
+        ('Datas', {
+            'fields': ('data_cadastro', 'data_atualizacao'),
+            'classes': ('collapse',)
+        }),
+    )
